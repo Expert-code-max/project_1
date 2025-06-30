@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ user.username }}'s Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* General Body and Headings */
+        body { font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f8f8f8; color: #333; line-height: 1.6; }
+        h1 { text-align: center; color: #012e17; margin: 30px auto; font-size: 2.5em; }
+
+        /* Navigation Bar (Consistent with product_list and cart) */
+        nav { background-color: #012e17; padding: 0 10px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+        nav ul { list-style-type: none; margin: 0; padding: 0; display: flex; width: 100%; max-width: 1200px; height: 100%; align-items: center; }
+        nav ul li { height: 100%; display: flex; align-items: center; padding: 0 15px; white-space: nowrap; }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 20px; font-weight: bold; transition: color 0.3s ease; }
+        nav ul li a:hover { color: #f0f0f0; text-decoration: underline; }
+        nav ul li:first-child { margin-right: auto; font-size: 24px; color: #4CAF50; padding-left: 0; }
+        nav ul li:nth-last-child(-n+3) { margin-left: 10px; background-color: orange; border-radius: 5px; font-weight: bold; color: #012e17; padding: 8px 15px; height: auto; transition: background-color 0.3s ease, color 0.3s ease; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        nav ul li:nth-last-child(-n+3):hover { background-color: #e69500; color: #fff; }
+
+        /* Messages Styling */
+        .messages { list-style: none; padding: 0; margin: 20px auto; text-align: center; font-size: 1.1em; font-weight: bold; max-width: 800px; }
+        .messages li { padding: 12px 20px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: inline-block; max-width: 90%; }
+        .messages li.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .messages li.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .messages li.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .messages li.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Profile Specific Styles */
+        .profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .profile-container h2 {
+            color: #012e17;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+        .profile-details p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-align: left;
+            padding-left: 20px;
+        }
+        .profile-details strong {
+            display: inline-block;
+            min-width: 100px; /* Align labels */
+            text-align: right;
+            margin-right: 10px;
+            color: #555;
+        }
+        .profile-links {
+            margin-top: 30px;
+        }
+        .profile-links a {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            display: inline-block; /* For side-by-side buttons */
+        }
+        .profile-links a:hover {
+            background-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        /* Footer Styling */
+        footer { background-color: #012e17; color: white; padding: 15px; text-align: center; margin-top: 40px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); }
+        footer a { color: #4CAF50; margin: 0 10px; text-decoration: none; transition: color 0.3s ease; }
+        footer a:hover { color: #76c78e; text-decoration: underline; }
+        footer i { margin-right: 5px; color: orange; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; margin: 20px auto; }
+            nav ul { flex-wrap: wrap; justify-content: center; height: auto; padding-bottom: 10px; }
+            nav ul li { padding: 10px; font-size: 18px; flex: 1 0 auto; min-width: 80px; margin: 5px; }
+            nav ul li:first-child { width: 100%; text-align: center; margin: 0; order: -1; }
+            nav ul li:nth-last-child(-n+3) { height: auto; margin: 5px; flex: 1 1 auto; max-width: unset; padding: 8px 10px; }
+            .profile-container { margin: 20px; padding: 20px; }
+            .profile-details p { padding-left: 0; text-align: center; }
+            .profile-details strong { min-width: unset; text-align: center; margin-right: 0; display: block; }
+            .profile-links a { margin: 10px 5px; width: calc(100% - 20px); } /* Full width buttons on mobile */
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}"><i class="fa-solid fa-cart-shopping"></i> Swift Buy</a> | </li>
+            <li><a href="">About Us</a></li>
+            <li><a href="{% url 'product_list' %}">Products</a></li>
+            <li><a href="">Contact Us</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'user_profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+            <li><a href="{% url 'view_cart' %}">Cart</a></li>
+        </ul>
+    </nav>
+
+    <h1>Your Profile</h1>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="profile-container">
+        <h2>Welcome, {{ user.first_name|default:user.username }}!</h2>
+        <div class="profile-details">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>First Name:</strong> {{ user.first_name }}</p>
+            <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+            {# CORRECTED: Changed 'created_at' to 'date_joined' to match your User model #}
+            <p><strong>Account Created:</strong> {{ user.date_joined|date:"F d, Y, P" }}</p>
+        </div>
+        <div class="profile-links">
+            <a href="#">Edit Profile (Coming Soon)</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Swift Buy. All rights reserved.</p>
+        <p>Follow us on:
+            <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        </p>
+    </footer>
+</body>
+</html>

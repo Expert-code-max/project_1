@@ -1,0 +1,157 @@
+<!-- users/templates/users/signup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* General Body and Headings */
+        body { font-family: Arial, sans-serif; padding: 0; margin: 0; background-color: #f8f8f8; color: #333; line-height: 1.6; }
+        h1 { text-align: center; color: #012e17; margin: 30px auto; font-size: 2.5em; }
+
+        /* Navigation Bar (Consistent with product_list and cart) */
+        nav { background-color: #012e17; padding: 0 10px; height: 60px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+        nav ul { list-style-type: none; margin: 0; padding: 0; display: flex; width: 100%; max-width: 1200px; height: 100%; align-items: center; }
+        nav ul li { height: 100%; display: flex; align-items: center; padding: 0 15px; white-space: nowrap; }
+        nav ul li a { color: #fff; text-decoration: none; font-size: 20px; font-weight: bold; transition: color 0.3s ease; }
+        nav ul li a:hover { color: #f0f0f0; text-decoration: underline; }
+        nav ul li:first-child { margin-right: auto; font-size: 24px; color: #4CAF50; padding-left: 0; }
+        nav ul li:nth-last-child(-n+3) { margin-left: 10px; background-color: orange; border-radius: 5px; font-weight: bold; color: #012e17; padding: 8px 15px; height: auto; transition: background-color 0.3s ease, color 0.3s ease; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        nav ul li:nth-last-child(-n+3):hover { background-color: #e69500; color: #fff; }
+
+        /* Messages Styling */
+        .messages { list-style: none; padding: 0; margin: 20px auto; text-align: center; font-size: 1.1em; font-weight: bold; max-width: 800px; }
+        .messages li { padding: 12px 20px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: inline-block; max-width: 90%; }
+        .messages li.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .messages li.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .messages li.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .messages li.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        /* Form Specific Styles */
+        .form-container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .form-container h2 {
+            color: #012e17;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+        .form-container p {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="password"] {
+            width: calc(100% - 20px); /* Account for padding */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .form-container button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            width: 100%;
+        }
+        .form-container button[type="submit"]:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .form-container .errorlist {
+            color: #f44336;
+            list-style-type: none;
+            padding: 0;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .form-container .helptext {
+            font-size: 0.8em;
+            color: #777;
+            text-align: left;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        .form-container a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+        /* Footer Styling */
+        footer { background-color: #012e17; color: white; padding: 15px; text-align: center; margin-top: 40px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); }
+        footer a { color: #4CAF50; margin: 0 10px; text-decoration: none; transition: color 0.3s ease; }
+        footer a:hover { color: #76c78e; text-decoration: underline; }
+        footer i { margin-right: 5px; color: orange; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; margin: 20px auto; }
+            nav ul { flex-wrap: wrap; justify-content: center; height: auto; padding-bottom: 10px; }
+            nav ul li { padding: 10px; font-size: 18px; flex: 1 0 auto; min-width: 80px; margin: 5px; }
+            nav ul li:first-child { width: 100%; text-align: center; margin: 0; order: -1; }
+            nav ul li:nth-last-child(-n+3) { height: auto; margin: 5px; flex: 1 1 auto; max-width: unset; padding: 8px 10px; }
+            .form-container { margin: 20px; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'product_list' %}"><i class="fa-solid fa-cart-shopping"></i> Swift Buy</a> | </li>
+            <li><a href="">About Us</a></li>
+            <li><a href="{% url 'product_list' %}">Products</a></li>
+            <li><a href="">Contact Us</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li> {# Updated URL #}
+            <li><a href="{% url 'login' %}">Login</a></li> {# Updated URL #}
+            <li><a href="{% url 'view_cart' %}">Cart</a></li>
+        </ul>
+    </nav>
+
+    <h1>Sign Up for Swift Buy</h1>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="form-container">
+        <h2>Create an Account</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} {# Renders each field as a paragraph #}
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'login' %}">Log In here</a>.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Swift Buy. All rights reserved.</p>
+        <p>Follow us on:
+            <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        </p>
+    </footer>
+</body>
+</html>

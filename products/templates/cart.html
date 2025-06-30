@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            border: 2px solid green;
+            background-color: rgb(219, 237, 245);
+            font-family: Arial;
+            padding: 20px;
+        }
+        .product-card{
+            border: 1px solid rgb(140, 216, 247);
+        }
+        .product-row{
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .product-image img {
+            height: 180px;
+            width: 200px;
+            border-radius: 10px;
+        }
+        .product-name, .product-quantity, .product-price, .product-total {
+            margin: 5px;
+            font-size: 20px;
+            text-align: left;
+            padding: 0 30px;
+         }
+        .product-price {
+            font-weight: bold;
+            color: green;
+        }
+        .product-quantity {
+            font-weight: bold;
+            color: red;
+        }
+        .remove-from-cart, .edit-quantity {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .edit-quantity {
+            background-color: orange;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div class="cart-header">
+        <div class="header-image"></div>
+        <div class="header-name">Product</div>
+        <div class="header-quantity">Quantity</div>
+        <div class="header-price">Price</div>
+        <div class="header-total">Total</div>
+        <div class="header-action">Action</div>
+    </div>
+
+    {% for item in cart_items %}
+    <table class="product-card">
+        <tr class="product-row">
+            <td class="product-image">
+                <img src="{{item.product.image.url}}" alt="{{item.product.name}}">
+            </td>
+            <td class="product-name">{{ item.product.name }}</td>
+            <td class="product-quantity">Quantity: {{ item.quantity }}</td>
+            <td class="product-price">Price: ${{ item.total_price }}</td>
+            <td class="product-total">Total: {{ item.total_price }}</td>
+            
+            <td class="product-actions">
+                <form action="{% url 'remove_from_cart' item.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="remove-from-cart" onclick="">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </form>
+                <form action="{% url 'edit_cart_item' item.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                <button type="submit"  class="edit-quantity" onclick="">
+                    <i class="fas fa-edit"></i> Edit Quantity
+                </button>
+            </td>
+        </tr>
+    </table>
+    {% endfor %}
+</body>
+</html>

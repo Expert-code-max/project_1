@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+
+        .order-id, .order-item, .order-quantity, .order-price, .order-description {
+            margin-right: 20px;
+            flex: 1;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-item {
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .order-price {
+            color: green;
+            font-weight: bold;
+        }
+
+        .order-description {
+            color: #777;
+        }
+
+        .complete-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .complete-button:hover {
+            background-color: #218838;
+        }
+        .order-card:first-child {
+            background-color: chocolate;
+            color: white;
+            font-weight: bold;
+        }
+        .order-id-label, .order-item-label, .order-quantity-label, .order-price-label, .order-description-label {
+            font-weight: bold;
+            font-size: large;
+            color: #f5f5f5;
+            flex: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Order List</h1>
+    {% if orders %}
+        <div class="order-list">
+                <div class="order-card">
+                    <div class="order-id-label">Order ID</div>
+                    <div class="order-item-label">Item</div>
+                    <div class="order-quantity-label"> Quantity</div>
+                    <div class="order-price-label">Price (ksh)</div>
+                    <div class="order-description-label">Order details</div>
+                    <div class="order-description-label">Action</div>
+                </div>
+            {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-id">{{ order.id }}</div>
+                    <div class="order-item">{{ order.product.name }}</div>
+                    <div class="order-quantity"> {{ order.quantity }}</div>
+                    <div class="order-price">{{ order.total_price }}</div>
+                    <div class="order-description">{{ order.product.description }}</div>
+                    <button class="complete-button">Complete Order</button>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No orders available.</p>
+    {% endif %}
+</body>
+</html>

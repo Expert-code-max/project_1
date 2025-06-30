@@ -1,0 +1,203 @@
+<html>
+<head>
+    <title>Product List</title> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+   <style>
+        .product-card {
+            flex: 0 1 calc(25% - 40px); /* 4 per row with some spacing */
+            box-sizing: border-box;
+            border: 1px solid blue;
+            padding: 15px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            text-align: center;
+            max-width: 300px;
+        }
+        img {
+            height: 200px;
+            width: 100%;
+        }
+        .add-to-cart {
+            border: 1px solid green;
+            color: red;
+            background-color: yellow;
+            padding: 5px;
+            border-radius: 20px;
+            font-size: large;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .product-name {
+            font-weight: bold;
+        }
+        .product-price {
+            font-weight: bold;
+            color: green;
+        }
+        h1 {
+            text-align: center;
+        }
+       ul {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            border: 2px solid green;
+            background-color: orange;
+            font-family: Arial;
+            padding: 20px;
+        }
+        nav{
+            color: red;
+            border: 2px solid green;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul{
+            list-style-type: none;
+            padding: 20px;
+        }
+        nav ul li a{
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 28px;
+            padding: 20px;
+        }
+          .add-to-cart:hover {
+            background-color: #98d2da;
+            border: 1px solid #070606;
+            color: black;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+         nav ul li a:hover {
+            text-decoration: underline;
+        }
+        /* Align first nav li to the left */
+        nav ul li:first-child {
+            margin-right: auto;
+            margin-left: 0;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        /* Align last 3 nav li's to the right / make their height same as other nav li's */
+        nav ul li:nth-last-child(-n+3) {
+            margin-left: 10px;
+            border-radius: 5px;
+            background-color: orange;          
+            font-weight: bold;
+            color: #012e17;
+            height: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .product-card {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        /*Animate shop-title with blinking and shadow*/
+        .shop-title {
+            text-align: center;
+            font-size: 36px;
+            color: #012e17;
+            text-shadow: #4CAF50 2px 2px 4px;
+            margin-top: 20px;
+            animation: blink 1.5s infinite alternate, shadow 1.5s infinite alternate;
+        }
+        footer {
+            background-color: #012e17;
+            color: white;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        footer a {
+            color: #4CAF50;
+            margin: 0 10px;
+        }
+
+        footer i {
+            margin-right: 5px;
+            color: orange;
+        }
+        @media (max-width: 768px) {
+        .product-card {
+            flex: 0 1 calc(50% - 20px); /* 2 per row */
+        }
+}
+
+        @media (max-width: 480px) {
+            .product-card {
+                flex: 0 1 100%; /* 1 per row */
+            }
+        }
+        </style>
+</head>
+<body>
+    <nav>
+        <ul>
+           <li><a href=""><i class="fa-solid fa-cart-shopping"></i> Swift Buy</a> | </li>
+            <li><a href="">About us</a></li>
+            <li><a href="">Products</a></li>
+            <li><a href="">Contact us</a></li>
+            <li><a href="">Login</a></li>
+            <li><a href="">Cart</a></li>
+            <li><a href="">Sign up</a></li>
+        </ul>
+    </nav>
+   <h1>Products</h1>
+   <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=1305&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
+   <h1 class="shop-title">Start Shopping</h1>
+   {% if products %}
+        <ul style="list-style-type: none; padding: 0%;">
+            {% for product in products %}
+            <li class="product-card">
+                
+            {% if product.image %}
+                <img src="{{ product.image.url }}">
+            {% else %}
+                <img src="/path/to/default-image.jpg" alt="No Image Available">
+            {% endif %}
+
+
+                <div class="product-name">{{product.name}}</div>
+                <div>{{product.description}}</div>
+                <div class="product-price">ksh {{product.price}}</div>
+                <div>Quantity: {{product.quantity}}</div>
+                <form action="{%url 'add_to_cart' product.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button type="submit" class="add-to-cart">
+                        <i class="fas fa-cart-plus"></i>Add to Cart
+                    </button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <p>No products available.</p>
+        {% endif %}
+<footer style="text-align: center; margin-top: 20px;">
+    <p>&copy; 2023 Swift Buy. All rights reserved.</p>
+        <p>Follow us on:
+            <a href="https://www.facebook.com" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://www.twitter.com" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+</footer>            
+</body>
+</html>
+
+    
