@@ -83,8 +83,9 @@
             <td class="product-name">{{ item.product.name }}</td>
             <td class="product-quantity">Quantity: {{ item.quantity }}</td>
             <td class="product-price">Price: ${{ item.total_price }}</td>
-            <td class="product-total">Total: {{ item.total_price }}</td>
-            
+            <td class="product-total">Total: {{ item.total_price }}
+                      </td>
+                   </tr>
             <td class="product-actions">
                 <form action="{% url 'remove_from_cart' item.id %}" method="post" style="display:inline;">
                     {% csrf_token %}
@@ -96,9 +97,9 @@
                     {% csrf_token %}
                 <button type="submit"  class="edit-quantity" onclick="">
                     <i class="fas fa-edit"></i> Edit Quantity
-                </button>
+                    </button>
+                </form>
             </td>
-        </tr>
     </table>
     {% endfor %}
 </body>
